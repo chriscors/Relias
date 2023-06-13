@@ -19,3 +19,4 @@ For this exercise, I’d like you to look at a simple API, TMDB API https://www.
   - Next.js?
   - Typescript?
 - MUI components
+- Tailwind
