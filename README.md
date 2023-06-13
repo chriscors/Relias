@@ -6,6 +6,9 @@ For this exercise, I’d like you to look at a simple API, TMDB API https://www.
 
 ### Requirements:
 
+*Wireframes:*
+[Miro Board](https://miro.com/app/board/uXjVM_HanXM=/?share_link_id=314779408430)
+
 *MVP:*
 - [ ] Pull from the API and display data
 - [ ] 2
@@ -16,7 +19,9 @@ For this exercise, I’d like you to look at a simple API, TMDB API https://www.
 
 *Tech*:
 - React
-  - Next.js?
-  - Typescript?
-- MUI components
-- Tailwind
+  - Next.js
+    - No: Next provides a great set of features for larger apps, eg SSR, integrated routing. I don't expect to use routing in this app.
+  - Typescript
+    - Yes: While maybe overkill, t will allow me to sharpen my TS skills and provide helpful autocomplete and type checking
+- Material UI components
+- Tailwind CSS
