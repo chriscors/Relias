@@ -11,7 +11,12 @@ For this exercise, I’d like you to look at a simple API, TMDB API https://www.
 
 *MVP:*
 - [ ] Pull from the API and display data
-- [ ] 2
+- [ ] Show poster, title, year, rating
+
+Limitations:
+- Time
+- API does not provide much complex filters besides year
+- I could create a front end filter that appends pages if I wanted to
 
 *Additional:*
 
