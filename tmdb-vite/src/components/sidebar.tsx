@@ -78,7 +78,16 @@ export default function Sidebar() {
         >
           <Divider sx={{ margin: "1rem 0" }} />
           {/* Show filters */}
-          <Filters props={filterBundle} />
+          <Filters
+            genreFilter={genreFilter}
+            setGenreFilter={setGenreFilter}
+            ratingFilter={ratingFilter}
+            setRatingFilter={setRatingFilter}
+            releaseStartFilter={releaseStartFilter}
+            setReleaseStartFilter={setReleaseStartFilter}
+            releaseEndFilter={releaseEndFilter}
+            setReleaseEndFilter={setReleaseEndFilter}
+          />
         </Grid2>
       </Grid2>
     </>
