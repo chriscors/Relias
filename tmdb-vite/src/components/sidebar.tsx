@@ -24,17 +24,6 @@ export default function Sidebar() {
   const [ratingFilter, setRatingFilter] = useState("");
   const [releaseStartFilter, setReleaseStartFilter] = useState("");
   const [releaseEndFilter, setReleaseEndFilter] = useState("");
-  //Create props bundle for filter
-  const filterBundle = {
-    genreFilter: genreFilter,
-    setGenreFilter: setGenreFilter,
-    ratingFilter: ratingFilter,
-    setRatingFilter: setRatingFilter,
-    releaseStartFilter: releaseStartFilter,
-    setReleaseStartFilter: setReleaseStartFilter,
-    releaseEndFilter: releaseEndFilter,
-    setReleaseEndFilter: setReleaseEndFilter,
-  };
 
   const handleToggleOpen = () => {
     setMobileOpen((open) => !open);
