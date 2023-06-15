@@ -74,7 +74,7 @@ export default function Filters({
             defaultValue={0}
             valueLabelDisplay="auto"
             step={1}
-            min={1990}
+            min={1900}
             max={date.getFullYear()}
             value={releaseFilter}
             onChange={(e, v) => setReleaseFilter(v as number[])}
