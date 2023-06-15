@@ -20,6 +20,22 @@ export default function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
 
+  const [genreFilter, setGenreFilter] = useState<string[]>([]);
+  const [ratingFilter, setRatingFilter] = useState("");
+  const [releaseStartFilter, setReleaseStartFilter] = useState("");
+  const [releaseEndFilter, setReleaseEndFilter] = useState("");
+  //Create props bundle for filter
+  const filterBundle = {
+    genreFilter: genreFilter,
+    setGenreFilter: setGenreFilter,
+    ratingFilter: ratingFilter,
+    setRatingFilter: setRatingFilter,
+    releaseStartFilter: releaseStartFilter,
+    setReleaseStartFilter: setReleaseStartFilter,
+    releaseEndFilter: releaseEndFilter,
+    setReleaseEndFilter: setReleaseEndFilter,
+  };
+
   const handleToggleOpen = () => {
     setMobileOpen((open) => !open);
   };
@@ -61,16 +77,8 @@ export default function Sidebar() {
           sm={12}
         >
           <Divider sx={{ margin: "1rem 0" }} />
-          <Grid2 container>
-            <Grid2>
-              <Typography>Filters</Typography>
-            </Grid2>
-            <Grid2 xs={4}>
-              {/* Add a show only if filters selected */}
-              <Button>Clear Filters</Button>
-            </Grid2>
-          </Grid2>
-          <Filters />
+          {/* Show filters */}
+          <Filters props={filterBundle} />
         </Grid2>
       </Grid2>
     </>
