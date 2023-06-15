@@ -1,4 +1,4 @@
-import { Button, Typography } from "@mui/material";
+import { Button, Slider, Typography } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { Dispatch, SetStateAction } from "react";
 import Box from "@mui/material/Box";
@@ -11,12 +11,10 @@ import Chip from "@mui/material/Chip";
 interface FilterBundleProps {
   genreFilter: string[];
   setGenreFilter: Dispatch<SetStateAction<string[]>>;
-  ratingFilter: string;
-  setRatingFilter: Dispatch<SetStateAction<string>>;
-  releaseStartFilter: string;
-  setReleaseStartFilter: Dispatch<SetStateAction<string>>;
-  releaseEndFilter: string;
-  setReleaseEndFilter: Dispatch<SetStateAction<string>>;
+  ratingFilter: number;
+  setRatingFilter: Dispatch<SetStateAction<number>>;
+  releaseFilter: number[];
+  setReleaseFilter: Dispatch<SetStateAction<number[]>>;
 }
 
 export default function Filters({
@@ -24,11 +22,10 @@ export default function Filters({
   setGenreFilter,
   ratingFilter,
   setRatingFilter,
-  releaseStartFilter,
-  setReleaseStartFilter,
-  releaseEndFilter,
-  setReleaseEndFilter,
+  releaseFilter,
+  setReleaseFilter,
 }: FilterBundleProps) {
+  const date = new Date();
   return (
     <>
       <Grid2 container>
@@ -40,12 +37,49 @@ export default function Filters({
           <Button>Clear</Button>
         </Grid2>
       </Grid2>
-      <Grid2 sx={{ marginTop: "1rem" }}>
-        {/* <Typography sx={{ fontWeight: "bold" }}>Genre</Typography> */}
-        <GenreSelect
-          genreFilter={genreFilter}
-          setGenreFilter={setGenreFilter}
-        />
+      <Grid2
+        container
+        spacing={3}
+        sx={{ display: "flex", flexDirection: "column" }}
+      >
+        <Grid2>
+          {/* Genre select dropdown */}
+          <Typography sx={{ fontWeight: "bold" }}>Genre</Typography>
+          <GenreSelect
+            genreFilter={genreFilter}
+            setGenreFilter={setGenreFilter}
+          />
+        </Grid2>
+        <Grid2>
+          {/* Minimum Rating slider */}
+          <Typography sx={{ fontWeight: "bold" }}>
+            Minimum Rating: {ratingFilter}
+          </Typography>
+          <Slider
+            defaultValue={0}
+            valueLabelDisplay="auto"
+            step={1}
+            min={0}
+            max={10}
+            value={ratingFilter}
+            onChange={(e, v) => setRatingFilter(v as number)}
+          />
+        </Grid2>
+        <Grid2>
+          {/* Release year between range */}
+          <Typography sx={{ fontWeight: "bold" }}>
+            Release Dates: {`${releaseFilter[0]} - ${releaseFilter[1]}`}
+          </Typography>
+          <Slider
+            defaultValue={0}
+            valueLabelDisplay="auto"
+            step={1}
+            min={1990}
+            max={date.getFullYear()}
+            value={releaseFilter}
+            onChange={(e, v) => setReleaseFilter(v as number[])}
+          />
+        </Grid2>
       </Grid2>
     </>
   );
@@ -70,44 +104,39 @@ interface GenreProps {
 
 function GenreSelect({ genreFilter, setGenreFilter }: GenreProps) {
   console.log(genreFilter);
-  console.log(setGenreFilter);
 
   const handleChange = (event: SelectChangeEvent<typeof genreFilter>) => {
     //get the value of the select component
     const value = event.target.value;
     //set genreFilter to equal the value
     setGenreFilter(
-      // On autofill we get a stringified value, split it or use the array that was received (MUI suggests this).
+      // Typescript: if  it's a string. split to be an array
       typeof value === "string" ? value.split(",") : value
     );
   };
 
   return (
     <div>
-      <FormControl sx={{ m: 1, width: "100%" }}>
-        <InputLabel id="genre-select-label">Genre</InputLabel>
+      <FormControl sx={{ width: "100%" }}>
+        {!genreFilter && (
+          <InputLabel id="genre-select-label">Select Genres</InputLabel>
+        )}
         <Select
           labelId="genre-select-label"
           id="genre-select"
           multiple
+          label=""
           value={genreFilter}
           onChange={handleChange}
-          input={<OutlinedInput id="select-multiple-chip" label="Genre" />}
-          // renderValue={(selected) => (
-          //   <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-          //     {selected.map((value) => (
-          //       <Chip key={value} label={value} />
-          //     ))}
-          //   </Box>
-          // )}
-          MenuProps={{
-            PaperProps: {
-              style: {
-                maxHeight: 224,
-                width: 250,
-              },
-            },
-          }}
+          input={<OutlinedInput id="genre-select" />}
+          renderValue={(selected) => (
+            //Render the selected genres as chips
+            <div className="flex gap-1">
+              {selected.map((value) => (
+                <Chip key={value} label={value} />
+              ))}
+            </div>
+          )}
         >
           {genres.map((genre) => (
             <MenuItem
