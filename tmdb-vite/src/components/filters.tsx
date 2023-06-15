@@ -1,7 +1,6 @@
 import { Button, Typography } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { Dispatch, SetStateAction } from "react";
-import { Theme, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
@@ -36,13 +35,13 @@ export default function Filters({
         <Grid2 xs={8} sx={{ display: "flex", alignItems: "center" }}>
           <Typography variant="h6">Filters</Typography>
         </Grid2>
-        <Grid2 xs={4}>
+        <Grid2 xs={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
           {/* Add a show only if filters selected */}
           <Button>Clear</Button>
         </Grid2>
       </Grid2>
       <Grid2 sx={{ marginTop: "1rem" }}>
-        <Typography sx={{ fontWeight: "bold" }}>Genre</Typography>
+        {/* <Typography sx={{ fontWeight: "bold" }}>Genre</Typography> */}
         <GenreSelect
           genreFilter={genreFilter}
           setGenreFilter={setGenreFilter}
@@ -54,17 +53,13 @@ export default function Filters({
 
 const genres = ["Comedy", "Action", "Horror"];
 
-function getSelected(
-  genre: string,
-  selectedGenres: readonly string[],
-  theme: Theme
-) {
+function getSelected(genre: string, selectedGenres: readonly string[]) {
+  console.log(genre);
+  console.log(selectedGenres);
+
   //Return sx for fontWeight regular in genre not in genreList, otherwise, return medium font if genre in genreList
   return {
-    fontWeight:
-      selectedGenres.indexOf(genre) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
+    fontWeight: selectedGenres.indexOf(genre) === -1 ? "regular" : "bold",
   };
 }
 
@@ -74,7 +69,8 @@ interface GenreProps {
 }
 
 function GenreSelect({ genreFilter, setGenreFilter }: GenreProps) {
-  const theme = useTheme();
+  console.log(genreFilter);
+  console.log(setGenreFilter);
 
   const handleChange = (event: SelectChangeEvent<typeof genreFilter>) => {
     //get the value of the select component
@@ -97,13 +93,13 @@ function GenreSelect({ genreFilter, setGenreFilter }: GenreProps) {
           value={genreFilter}
           onChange={handleChange}
           input={<OutlinedInput id="select-multiple-chip" label="Genre" />}
-          renderValue={(selected) => (
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip key={value} label={value} />
-              ))}
-            </Box>
-          )}
+          // renderValue={(selected) => (
+          //   <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+          //     {selected.map((value) => (
+          //       <Chip key={value} label={value} />
+          //     ))}
+          //   </Box>
+          // )}
           MenuProps={{
             PaperProps: {
               style: {
@@ -117,7 +113,7 @@ function GenreSelect({ genreFilter, setGenreFilter }: GenreProps) {
             <MenuItem
               key={genre}
               value={genre}
-              style={getSelected(genre, genreFilter, theme)}
+              style={getSelected(genre, genreFilter)}
             >
               {genre}
             </MenuItem>
