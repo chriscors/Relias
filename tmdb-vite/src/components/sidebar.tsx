@@ -17,13 +17,17 @@ import SearchIcon from "@mui/icons-material/Search";
 import Filters from "./filters";
 
 export default function Sidebar() {
+  const date = new Date();
+
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
 
   const [genreFilter, setGenreFilter] = useState<string[]>([]);
-  const [ratingFilter, setRatingFilter] = useState("");
-  const [releaseStartFilter, setReleaseStartFilter] = useState("");
-  const [releaseEndFilter, setReleaseEndFilter] = useState("");
+  const [ratingFilter, setRatingFilter] = useState(0);
+  const [releaseFilter, setReleaseFilter] = useState<number[]>([
+    1990,
+    date.getFullYear(),
+  ]);
 
   const handleToggleOpen = () => {
     setMobileOpen((open) => !open);
@@ -72,10 +76,8 @@ export default function Sidebar() {
             setGenreFilter={setGenreFilter}
             ratingFilter={ratingFilter}
             setRatingFilter={setRatingFilter}
-            releaseStartFilter={releaseStartFilter}
-            setReleaseStartFilter={setReleaseStartFilter}
-            releaseEndFilter={releaseEndFilter}
-            setReleaseEndFilter={setReleaseEndFilter}
+            releaseFilter={releaseFilter}
+            setReleaseFilter={setReleaseFilter}
           />
         </Grid2>
       </Grid2>
