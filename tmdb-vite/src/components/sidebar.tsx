@@ -43,7 +43,7 @@ export default function Sidebar() {
   */
   return (
     <>
-      <Grid2 container>
+      <Grid2 container alignItems={"start"} marginBottom={"2rem"}>
         <Grid2 xs={10}>
           <TextField
             id="outlined-basic"
