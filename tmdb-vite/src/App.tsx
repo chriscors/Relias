@@ -115,7 +115,7 @@ function App() {
                 ?.slice(0, paginate)
                 .map((movie) => <MovieCard movieData={movie} key={movie.id} />)}
           </Grid2>
-          {apiResponse && (
+          {filteredApiResponse && paginate < filteredApiResponse?.length && (
             <div className="flex justify-center align-center h-20">
               <Button
                 size="large"
@@ -123,6 +123,11 @@ function App() {
               >
                 Show More
               </Button>
+            </div>
+          )}
+          {filteredApiResponse?.length === 0 && (
+            <div className="flex justify-center align-center h-20">
+              <Typography variant="h4">No Results</Typography>
             </div>
           )}
         </Grid2>
