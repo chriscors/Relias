@@ -46,7 +46,11 @@ function App() {
       <Grid2 container spacing={2}>
         {/* Sidebar */}
         <Grid2 xs={12} sm={4} md={3}>
-          <Sidebar movieData={movieData} setMovieData={setMovieData} />
+          <Sidebar
+            setApiResponse={setApiResponse}
+            setLoading={setLoading}
+            setHasSearched={setHasSearched}
+          />
         </Grid2>
         {/* Results */}
         <Grid2 xs={12} sm={8} md={9}>
