@@ -19,13 +19,14 @@ import { ApiResponse, MovieData } from "../types";
 import axios from "axios";
 
 export default function Sidebar({
-  apiResponse,
   setApiResponse,
+  setLoading,
+  setHasSearched,
 }: {
-  apiResponse: ApiResponse;
-  setApiResponse: Dispatch<SetStateAction<ApiResponse>>;
+  setApiResponse: Dispatch<SetStateAction<ApiResponse | null>>;
+  setLoading: Dispatch<SetStateAction<boolean>>;
+  setHasSearched: Dispatch<SetStateAction<boolean>>;
 }) {
-  const [movieData, setMovieData] = useState<MovieData[]>([]);
   const date = new Date();
   const [searchText, setSearchText] = useState("");
 
@@ -43,6 +44,10 @@ export default function Sidebar({
   };
 
   const handleSearch = (event: any) => {
+    //Set loading to TRUE (show spinner), clear past results, and set has searched to true, changing header
+    setLoading(true);
+    setApiResponse(null);
+    setHasSearched(true);
     event.preventDefault();
 
     const options = {
@@ -98,6 +103,8 @@ export default function Sidebar({
         ...response.data.results,
       ];
     }
+    setApiResponse(baseResponse);
+    setLoading(false);
   };
 
   /* Render: 
