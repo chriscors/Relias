@@ -10,7 +10,6 @@ interface MovieDataProps {
 }
 
 export default function MovieCard({ movieData }: MovieDataProps) {
-  const releaseDate = new Date(movieData.release_date);
   return (
     <Grid2>
       <Card
@@ -75,7 +74,7 @@ export default function MovieCard({ movieData }: MovieDataProps) {
           </Grid2>
           <Grid2 container justifyContent={"space-between"}>
             <Typography variant="h6">
-              {movieData.release_date && releaseDate.getFullYear()}
+              {movieData.release_date && movieData.release_date.getFullYear()}
             </Typography>
             <Grid2
               xs={3}
