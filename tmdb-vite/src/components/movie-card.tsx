@@ -3,7 +3,6 @@ import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import "../App.css";
 import StarHalfIcon from "@mui/icons-material/StarHalf";
 import { Star, StarBorder, StarBorderOutlined } from "@mui/icons-material";
-import { Dispatch } from "react";
 
 interface MovieDataProps {
   movieData: {
@@ -22,6 +21,7 @@ interface MovieDataProps {
     vote_average: number;
     vote_count: number;
   };
+}
 
 export default function MovieCard({ movieData }: MovieDataProps) {
   const releaseDate = new Date(movieData.release_date);
