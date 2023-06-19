@@ -1,0 +1,19 @@
+.description:hover div {
+  display: flex;
+  overflow: scroll;
+  background-color: rgb(23, 23, 23);
+  animation: fadeAnimation 0.25s ease-in-out forwards;
+}
+
+.no-poster {
+  background-size: contain !important;
+}
+
+@keyframes fadeAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 80%;
+  }
+}

@@ -11,20 +11,101 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import SearchIcon from "@mui/icons-material/Search";
 import Filters from "./filters";
+import { ApiResponse, MovieData } from "../types";
+import axios from "axios";
 
-export default function Sidebar() {
-  const [mobileOpen, setMobileOpen] = useState(false);
+export default function Sidebar({
+  setApiResponse,
+  setLoading,
+  setHasSearched,
+}: {
+  setApiResponse: Dispatch<SetStateAction<ApiResponse | null>>;
+  setLoading: Dispatch<SetStateAction<boolean>>;
+  setHasSearched: Dispatch<SetStateAction<boolean>>;
+}) {
+  const date = new Date();
   const [searchText, setSearchText] = useState("");
+
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const [genreFilter, setGenreFilter] = useState<string[]>([]);
+  const [ratingFilter, setRatingFilter] = useState(0);
+  const [releaseFilter, setReleaseFilter] = useState<number[]>([
+    1900,
+    date.getFullYear(),
+  ]);
 
   const handleToggleOpen = () => {
     setMobileOpen((open) => !open);
   };
 
-  const handleSearch = () => {};
+  const handleSearch = (event: any) => {
+    //Set loading to TRUE (show spinner), clear past results, and set has searched to true, changing header
+    setLoading(true);
+    setApiResponse(null);
+    setHasSearched(true);
+    event.preventDefault();
+
+    const options = {
+      method: "GET",
+      url: "https://api.themoviedb.org/3/search/movie",
+      params: {
+        query: searchText,
+        include_adult: "true",
+        language: "en-US",
+        page: 1,
+      },
+      headers: {
+        accept: "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMjViZGY3NTBiZDM1OGFiOWY0ZGNiZDE1N2M0MjNiZiIsInN1YiI6IjY0ODg3MjhiOTkyNTljMDBjNWI2NGIxYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.kIfA4gOg-CgepL5qMEVtbdh7oOp9NzF--Gs3y8l90JI",
+      },
+    };
+
+    axios
+      .request(options)
+      .then(function (response) {
+        if (response.data.total_pages > 1) {
+          getAllResults(response.data);
+        } else setApiResponse(response.data);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+
+  const getAllResults = async (baseResponse: ApiResponse) => {
+    for (let pageNum = 2; pageNum < baseResponse.total_pages; pageNum++) {
+      const options = {
+        method: "GET",
+        url: "https://api.themoviedb.org/3/search/movie",
+        params: {
+          query: searchText,
+          include_adult: "true",
+          language: "en-US",
+          page: pageNum,
+        },
+        headers: {
+          accept: "application/json",
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMjViZGY3NTBiZDM1OGFiOWY0ZGNiZDE1N2M0MjNiZiIsInN1YiI6IjY0ODg3MjhiOTkyNTljMDBjNWI2NGIxYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.kIfA4gOg-CgepL5qMEVtbdh7oOp9NzF--Gs3y8l90JI",
+        },
+      };
+
+      const response = await axios.request(options);
+
+      baseResponse.results = [
+        ...baseResponse.results,
+        ...response.data.results,
+      ];
+    }
+    setApiResponse(baseResponse);
+    setLoading(false);
+  };
 
   /* Render: 
       1. Search Bar
@@ -34,18 +115,20 @@ export default function Sidebar() {
   */
   return (
     <>
-      <Grid2 container>
+      <Grid2 container alignItems={"start"} marginBottom={"2rem"}>
         <Grid2 xs={10}>
-          <TextField
-            id="outlined-basic"
-            label="Search"
-            variant="outlined"
-            fullWidth
-            value={searchText}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setSearchText(event.target.value);
-            }}
-          />
+          <form onSubmit={handleSearch}>
+            <TextField
+              id="outlined-basic"
+              label="Search for a Movie"
+              variant="outlined"
+              fullWidth
+              value={searchText}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setSearchText(event.target.value);
+              }}
+            />
+          </form>
         </Grid2>
         <Grid2 xs={2}>
           <IconButton
@@ -61,16 +144,15 @@ export default function Sidebar() {
           sm={12}
         >
           <Divider sx={{ margin: "1rem 0" }} />
-          <Grid2 container>
-            <Grid2>
-              <Typography>Filters</Typography>
-            </Grid2>
-            <Grid2 xs={4}>
-              {/* Add a show only if filters selected */}
-              <Button>Clear Filters</Button>
-            </Grid2>
-          </Grid2>
-          <Filters />
+          {/* Show filters */}
+          <Filters
+            genreFilter={genreFilter}
+            setGenreFilter={setGenreFilter}
+            ratingFilter={ratingFilter}
+            setRatingFilter={setRatingFilter}
+            releaseFilter={releaseFilter}
+            setReleaseFilter={setReleaseFilter}
+          />
         </Grid2>
       </Grid2>
     </>

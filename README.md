@@ -13,12 +13,22 @@ For this exercise, I’d like you to look at a simple API, TMDB API https://www.
 - [ ] Pull from the API and display data
 - [ ] Show poster, title, year, rating
 
+*Tier 1 goals:*
+- [ ] Filter movies by year, genre, rating
+- [ ] Responsive resizing on mobile, with pop in and out filter for xs screen size
+- [ ] Accessible tagging, aria labels, etc
+
+*Additional Stretch Goals:*
+- [ ] Paralax screen effect 
+- [ ] Dark mode
+- [ ] Modal popup displaying additional information
+- [ ] Sticky sidebar, or slide-in slide out
+- [ ] Pagination ()
 Limitations:
 - Time
 - API does not provide much complex filters besides year
 - I could create a front end filter that appends pages if I wanted to
 
-*Additional:*
 
 
 
