@@ -2,9 +2,8 @@ import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import "../App.css";
 import StarHalfIcon from "@mui/icons-material/StarHalf";
-import { Star, StarBorder, StarBorderOutlined } from "@mui/icons-material";
+import { Star, StarBorderOutlined } from "@mui/icons-material";
 import { MovieData } from "../types";
-import TheatersIcon from "@mui/icons-material/Theaters";
 interface MovieDataProps {
   movieData: MovieData;
 }
