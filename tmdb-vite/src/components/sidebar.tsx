@@ -49,7 +49,8 @@ export default function Sidebar({
     setMobileOpen((open) => !open);
   };
 
-  const handleSearch = () => {
+  const handleSearch = (event: Event) => {
+    event.preventDefault();
     const options = {
       method: "GET",
       url: "https://api.themoviedb.org/3/search/movie",
@@ -87,16 +88,18 @@ export default function Sidebar({
     <>
       <Grid2 container alignItems={"start"} marginBottom={"2rem"}>
         <Grid2 xs={10}>
-          <TextField
-            id="outlined-basic"
-            label="Search for a Movie"
-            variant="outlined"
-            fullWidth
-            value={searchText}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setSearchText(event.target.value);
-            }}
-          />
+          <form onSubmit={handleSearch}>
+            <TextField
+              id="outlined-basic"
+              label="Search for a Movie"
+              variant="outlined"
+              fullWidth
+              value={searchText}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setSearchText(event.target.value);
+              }}
+            />
+          </form>
         </Grid2>
         <Grid2 xs={2}>
           <IconButton
