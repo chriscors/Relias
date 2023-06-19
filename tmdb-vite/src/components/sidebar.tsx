@@ -19,26 +19,33 @@ import { ApiResponse, MovieData } from "../types";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import axios from "axios";
 
+interface SidebarProps {
+  setApiResponse: Dispatch<SetStateAction<ApiResponse | null>>;
+  setLoading: Dispatch<SetStateAction<boolean>>;
+  setHasSearched: Dispatch<SetStateAction<boolean>>;
+  genreFilter: string[];
+  setGenreFilter: Dispatch<SetStateAction<string[]>>;
+  ratingFilter: number;
+  setRatingFilter: Dispatch<SetStateAction<number>>;
+  releaseFilter: number[];
+  setReleaseFilter: Dispatch<SetStateAction<number[]>>;
+}
+
 export default function Sidebar({
   setApiResponse,
   setLoading,
   setHasSearched,
-}: {
-  setApiResponse: Dispatch<SetStateAction<ApiResponse | null>>;
-  setLoading: Dispatch<SetStateAction<boolean>>;
-  setHasSearched: Dispatch<SetStateAction<boolean>>;
-}) {
+  genreFilter,
+  setGenreFilter,
+  ratingFilter,
+  setRatingFilter,
+  releaseFilter,
+  setReleaseFilter,
+}: SidebarProps) {
   const date = new Date();
   const [searchText, setSearchText] = useState("");
 
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  const [genreFilter, setGenreFilter] = useState<string[]>([]);
-  const [ratingFilter, setRatingFilter] = useState(0);
-  const [releaseFilter, setReleaseFilter] = useState<number[]>([
-    1900,
-    date.getFullYear(),
-  ]);
 
   const handleToggleOpen = () => {
     setMobileOpen((open) => !open);
@@ -72,7 +79,15 @@ export default function Sidebar({
       .then(function (response) {
         if (response.data.total_pages > 1) {
           getAllResults(response.data);
-        } else setApiResponse(response.data);
+        } else {
+          //format the release date as a date object
+          response.data.results.map(
+            (movie: MovieData) =>
+              (movie.release_date = new Date(movie.release_date))
+          );
+
+          setApiResponse(response.data);
+        }
       })
       .catch(function (error) {
         console.error(error);
@@ -104,6 +119,10 @@ export default function Sidebar({
         ...response.data.results,
       ];
     }
+    baseResponse.results.map(
+      (movie) => (movie.release_date = new Date(movie.release_date))
+    );
+
     setApiResponse(baseResponse);
     setLoading(false);
   };
