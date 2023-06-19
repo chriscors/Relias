@@ -10,12 +10,18 @@ import {
   createTheme,
   useMediaQuery,
 } from "@mui/material";
-import { useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { ThemeProvider } from "@emotion/react";
-import { MovieData } from "./types";
+import { ApiResponse } from "./types";
+import axios from "axios";
+
 function App() {
-  //State holding  json movie data
-  const [movieData, setMovieData] = useState<MovieData[]>([]);
+  //State holding API response
+  const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
+  const [paginate, setPaginate] = useState(19);
+  const [loading, setLoading] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
+
   //Logic for setting MUI Dark mode
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 
@@ -28,6 +34,35 @@ function App() {
       }),
     [prefersDarkMode]
   );
+
+  //on website load, show popular movies as placeholder
+  useEffect(() => {
+    const options = {
+      method: "GET",
+      url: "https://api.themoviedb.org/3/discover/movie",
+      params: {
+        include_adult: "false",
+        include_video: "false",
+        language: "en-US",
+        page: "1",
+        sort_by: "popularity.desc",
+      },
+      headers: {
+        accept: "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMjViZGY3NTBiZDM1OGFiOWY0ZGNiZDE1N2M0MjNiZiIsInN1YiI6IjY0ODg3MjhiOTkyNTljMDBjNWI2NGIxYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.kIfA4gOg-CgepL5qMEVtbdh7oOp9NzF--Gs3y8l90JI",
+      },
+    };
+
+    axios
+      .request(options)
+      .then(function (response) {
+        setApiResponse(response.data);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }, []);
 
   return (
     // Enable dark mode using the theme provider component
