@@ -15,7 +15,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import SearchIcon from "@mui/icons-material/Search";
 import Filters from "./filters";
-import { ApiResponse, MovieData } from "../types";
+import { ApiResponse, Genre, MovieData } from "../types";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import axios from "axios";
 
@@ -23,8 +23,8 @@ interface SidebarProps {
   setApiResponse: Dispatch<SetStateAction<ApiResponse | null>>;
   setLoading: Dispatch<SetStateAction<boolean>>;
   setHasSearched: Dispatch<SetStateAction<boolean>>;
-  genreFilter: string[];
-  setGenreFilter: Dispatch<SetStateAction<string[]>>;
+  genreFilter: Genre[];
+  setGenreFilter: Dispatch<SetStateAction<Genre[]>>;
   ratingFilter: number;
   setRatingFilter: Dispatch<SetStateAction<number>>;
   releaseFilter: number[];

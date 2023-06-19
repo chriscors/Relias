@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { ThemeProvider } from "@emotion/react";
-import { ApiResponse, MovieData } from "./types";
+import { ApiResponse, Genre, MovieData } from "./types";
 import axios from "axios";
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
   const [hasSearched, setHasSearched] = useState(false);
 
   //Filters utilized in filter function
-  const [genreFilter, setGenreFilter] = useState<string[]>([]);
+  const [genreFilter, setGenreFilter] = useState<Genre[]>([]);
   const [ratingFilter, setRatingFilter] = useState(0);
   const [releaseFilter, setReleaseFilter] = useState<number[]>([
     1900,
