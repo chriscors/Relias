@@ -8,10 +8,13 @@ import {
   createTheme,
   useMediaQuery,
 } from "@mui/material";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ThemeProvider } from "@emotion/react";
-
+import { MovieData } from "./types";
 function App() {
+  //State holding  json movie data
+  const [movieData, setMovieData] = useState<MovieData[]>([]);
+  //Logic for setting MUI Dark mode
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 
   const theme = useMemo(
