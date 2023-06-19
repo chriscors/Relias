@@ -11,21 +11,37 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import SearchIcon from "@mui/icons-material/Search";
 import Filters from "./filters";
+import { MovieData } from "../types";
+import axios from "axios";
 
-export default function Sidebar() {
+interface ApiResponse {
+  page: number;
+  results: MovieData[];
+  total_pages: number;
+  total_results: number;
+}
+
+export default function Sidebar({
+  movieData,
+  setMovieData,
+}: {
+  movieData: MovieData[];
+  setMovieData: Dispatch<SetStateAction<string[]>>;
+}) {
   const date = new Date();
+  const [searchText, setSearchText] = useState("");
+  const [apiResponse, setApiResponse] = useState<ApiResponse>();
 
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [searchText, setSearchText] = useState("");
 
   const [genreFilter, setGenreFilter] = useState<string[]>([]);
   const [ratingFilter, setRatingFilter] = useState(0);
   const [releaseFilter, setReleaseFilter] = useState<number[]>([
-    1990,
+    1900,
     date.getFullYear(),
   ]);
 
@@ -33,7 +49,33 @@ export default function Sidebar() {
     setMobileOpen((open) => !open);
   };
 
-  const handleSearch = () => {};
+  const handleSearch = () => {
+    const options = {
+      method: "GET",
+      url: "https://api.themoviedb.org/3/search/movie",
+      params: {
+        query: searchText,
+        include_adult: "true",
+        language: "en-US",
+      },
+      headers: {
+        accept: "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMjViZGY3NTBiZDM1OGFiOWY0ZGNiZDE1N2M0MjNiZiIsInN1YiI6IjY0ODg3MjhiOTkyNTljMDBjNWI2NGIxYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.kIfA4gOg-CgepL5qMEVtbdh7oOp9NzF--Gs3y8l90JI",
+      },
+    };
+
+    axios
+      .request(options)
+      .then(function (response) {
+        console.log(response.data);
+        setApiResponse(response.data);
+        setMovieData(response.data.results);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
 
   /* Render: 
       1. Search Bar
@@ -47,7 +89,7 @@ export default function Sidebar() {
         <Grid2 xs={10}>
           <TextField
             id="outlined-basic"
-            label="Search"
+            label="Search for a Movie"
             variant="outlined"
             fullWidth
             value={searchText}
