@@ -36,7 +36,7 @@ export default function Filters({
         </Grid2>
         <Grid2 xs={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
           {/* Add a show only if filters selected */}
-          <Button>Clear</Button>
+          <Button onClick={clearFilters}>Clear</Button>
         </Grid2>
       </Grid2>
       <Grid2
@@ -90,9 +90,6 @@ export default function Filters({
 const genres = ["Comedy", "Action", "Horror"];
 
 function getSelected(genre: string, selectedGenres: readonly string[]) {
-  console.log(genre);
-  console.log(selectedGenres);
-
   //Return sx for fontWeight regular in genre not in genreList, otherwise, return medium font if genre in genreList
   return {
     fontWeight: selectedGenres.indexOf(genre) === -1 ? "regular" : "bold",
@@ -105,8 +102,6 @@ interface GenreProps {
 }
 
 function GenreSelect({ genreFilter, setGenreFilter }: GenreProps) {
-  console.log(genreFilter);
-
   const handleChange = (event: SelectChangeEvent<typeof genreFilter>) => {
     //get the value of the select component
     const value = event.target.value;
@@ -120,14 +115,10 @@ function GenreSelect({ genreFilter, setGenreFilter }: GenreProps) {
   return (
     <div>
       <FormControl sx={{ width: "100%" }}>
-        {!genreFilter && (
-          <InputLabel id="genre-select-label">Select Genres</InputLabel>
-        )}
         <Select
-          labelId="genre-select-label"
           id="genre-select"
           multiple
-          label=""
+          label="" //remove the label for consistency
           value={genreFilter}
           onChange={handleChange}
           input={<OutlinedInput id="genre-select" />}
