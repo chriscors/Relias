@@ -1,26 +1,59 @@
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import "../App.css";
+import StarHalfIcon from "@mui/icons-material/StarHalf";
+import { Star, StarBorder, StarBorderOutlined } from "@mui/icons-material";
+import { Dispatch } from "react";
 
-export default function MovieCard() {
+interface MovieDataProps {
+  movieData: {
+    adult: boolean;
+    backdrop_path: string;
+    genre_ids: number[];
+    id: number;
+    original_language: string;
+    original_title: string;
+    overview: string;
+    popularity: number;
+    poster_path: string;
+    release_date: string;
+    title: string;
+    video: boolean;
+    vote_average: number;
+    vote_count: number;
+  };
+
+export default function MovieCard({ movieData }: MovieDataProps) {
+  const releaseDate = new Date(movieData.release_date);
   return (
     <Grid2>
-      <Card sx={{ width: 345 }}>
+      <Card
+        sx={{
+          width: 275,
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <CardMedia
+          //Movie poster
           sx={{ height: 340 }}
-          image="https://upload.wikimedia.org/wikipedia/en/c/c7/Batman_Infobox.jpg"
+          image={`https://image.tmdb.org/t/p/original${movieData.poster_path}`}
           className="description"
         >
           <Grid2
+            //Container for the description
             container
             sx={{
               display: { xs: "none" },
               height: "100%",
               alignItems: "center",
               transition: "display 1s ease-in-out",
+              color: "white",
             }}
           >
             <Typography
+              //Description text
               variant="body"
               color="text"
               sx={{
@@ -28,38 +61,48 @@ export default function MovieCard() {
                 margin: "1rem",
               }}
             >
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-              Reiciendis dolore asperiores molestias dolores ratione voluptatem
-              repudiandae eaque, optio deleniti architecto maxime id provident,
-              officia suscipit sint aspernatur alias. Obcaecati, et! Lorem ipsum
-              dolor sit amet consectetur adipisicing elit. Ab vel fugiat dolorum
-              distinctio optio rerum? Asperiores consectetur pariatur id
-              adipisci dignissimos eius porro cumque laudantium magnam
-              voluptatum ducimus, nostrum ratione.
+              {movieData.overview}
             </Typography>
           </Grid2>
         </CardMedia>
-        <CardContent>
+        <CardContent
+          sx={{
+            display: "flex",
+            flexGrow: 1,
+            flexDirection: "column",
+            justifyContent: "space-between",
+          }}
+        >
           <Grid2 container>
-            <Grid2 xs={9}>
+            <Grid2>
               <Typography gutterBottom variant="h5" component="div">
-                Movie Title
-              </Typography>
-            </Grid2>
-            <Grid2 xs={3}>
-              <Typography
-                gutterBottom
-                variant="h5"
-                component="div"
-                sx={{ textAlign: "right" }}
-              >
-                Rating
+                {
+                  //Movie title
+                  movieData.title
+                }
               </Typography>
             </Grid2>
           </Grid2>
-          <Typography variant="body2" color="text.secondary">
-            2023
-          </Typography>
+          <Grid2 container justifyContent={"space-between"}>
+            <Typography variant="h6">{releaseDate.getFullYear()}</Typography>
+            <Grid2
+              xs={3}
+              container
+              justifyContent={"end"}
+              alignContent={"flex-start"}
+            >
+              <Typography gutterBottom variant="h6" sx={{ margin: "auto 0" }}>
+                {movieData.vote_average.toFixed(1)}
+              </Typography>
+              {movieData.vote_average < 3 ? (
+                <StarBorderOutlined sx={{ height: "100%" }} />
+              ) : movieData.vote_average < 7 ? (
+                <StarHalfIcon sx={{ height: "100%" }} />
+              ) : (
+                <Star sx={{ height: "100%" }} />
+              )}
+            </Grid2>
+          </Grid2>
         </CardContent>
       </Card>
     </Grid2>
