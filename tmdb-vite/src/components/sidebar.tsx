@@ -16,6 +16,7 @@ import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import SearchIcon from "@mui/icons-material/Search";
 import Filters from "./filters";
 import { ApiResponse, MovieData } from "../types";
+import FilterListIcon from "@mui/icons-material/FilterList";
 import axios from "axios";
 
 export default function Sidebar({
@@ -116,7 +117,16 @@ export default function Sidebar({
   return (
     <>
       <Grid2 container alignItems={"start"} marginBottom={"2rem"}>
-        <Grid2 xs={10}>
+        <Grid2 xs={2} sx={{ display: { xs: "block", sm: "none" } }}>
+          <IconButton
+            onClick={handleToggleOpen}
+            size="large"
+            sx={{ height: "100%" }}
+          >
+            <FilterListIcon />
+          </IconButton>
+        </Grid2>
+        <Grid2 xs={8} sm={10}>
           <form onSubmit={handleSearch}>
             <TextField
               id="outlined-basic"
@@ -130,7 +140,7 @@ export default function Sidebar({
             />
           </form>
         </Grid2>
-        <Grid2 xs={2}>
+        <Grid2 container xs={2} justifyContent={"flex-end"}>
           <IconButton
             onClick={handleSearch}
             size="large"
@@ -154,6 +164,25 @@ export default function Sidebar({
             setReleaseFilter={setReleaseFilter}
           />
         </Grid2>
+      </Grid2>
+      <Grid2
+        //shows only on xs and if filter is clicked
+        sx={
+          mobileOpen
+            ? { display: { xs: "block", sm: "none" }, width: "100%" }
+            : { display: "none" }
+        }
+      >
+        <Divider sx={{ margin: "1rem 0" }} />
+        {/* Show filters */}
+        <Filters
+          genreFilter={genreFilter}
+          setGenreFilter={setGenreFilter}
+          ratingFilter={ratingFilter}
+          setRatingFilter={setRatingFilter}
+          releaseFilter={releaseFilter}
+          setReleaseFilter={setReleaseFilter}
+        />
       </Grid2>
     </>
   );
