@@ -69,7 +69,9 @@ export default function Filters({
             min={0}
             max={10}
             value={ratingFilter}
-            onChange={(e, v) => setRatingFilter(v as number)}
+            onChange={(_, v) => {
+              setRatingFilter(v as number);
+            }}
           />
         </Grid2>
         <Grid2>
