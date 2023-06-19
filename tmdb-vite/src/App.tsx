@@ -54,12 +54,17 @@ function App() {
         </Grid2>
         {/* Results */}
         <Grid2 xs={12} sm={8} md={9}>
-          <Typography variant="h4" marginBottom={"1rem"}>
-            Results
-          </Typography>
-          <Grid2 container spacing={3} justifyContent={"space-evenly"}>
-            {movieData &&
-              movieData.map((movie) => <MovieCard movieData={movie} />)}
+          <Grid2
+            container
+            spacing={3}
+            justifyContent={"space-evenly"}
+            height={"100%"}
+          >
+            {loading && <CircularProgress sx={{ margin: "5rem 0" }} />}
+            {apiResponse &&
+              apiResponse.results
+                .slice(0, paginate)
+                .map((movie) => <MovieCard movieData={movie} key={movie.id} />)}
           </Grid2>
         </Grid2>
       </Grid2>
