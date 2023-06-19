@@ -54,16 +54,23 @@ function App() {
     getPopularMovies(setApiResponse);
   }, []);
 
-  //create a shallow copy f the API response that only includes those filtered, update it every re-render
-  const filteredApiResponse = apiResponse?.results
-    .filter((movie) => {
-      return (
-        movie.release_date.getFullYear() >= releaseFilter[0] &&
-        movie.release_date.getFullYear() <= releaseFilter[1] &&
-        movie.vote_average >= ratingFilter
-      );
-    })
-    .slice(0, paginate);
+  console.log(genreFilter);
+  console.log(apiResponse);
+
+  //create a shallow copy of the API response that only includes those filtered, update it every re-render
+  // for genre: if there are genre filters applied (length check), map the array of genre ids for each movie and see if any are in the filter
+  const filteredApiResponse = apiResponse?.results.filter((movie) => {
+    return (
+      movie.release_date.getFullYear() >= releaseFilter[0] &&
+      movie.release_date.getFullYear() <= releaseFilter[1] &&
+      movie.vote_average >= ratingFilter &&
+      (genreFilter.length === 0
+        ? true
+        : movie.genre_ids.some(
+            (genreId) => genreFilter.map((g) => g.id).indexOf(genreId) > -1
+          ))
+    );
+  });
 
   return (
     // Enable dark mode using the theme provider component
@@ -104,9 +111,9 @@ function App() {
           >
             {loading && <CircularProgress sx={{ margin: "5rem 0" }} />}
             {apiResponse &&
-              filteredApiResponse?.map((movie) => (
-                <MovieCard movieData={movie} key={movie.id} />
-              ))}
+              filteredApiResponse
+                ?.slice(0, paginate)
+                .map((movie) => <MovieCard movieData={movie} key={movie.id} />)}
           </Grid2>
           {apiResponse && (
             <div className="flex justify-center align-center h-20">
