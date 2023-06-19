@@ -66,6 +66,16 @@ function App() {
                 .slice(0, paginate)
                 .map((movie) => <MovieCard movieData={movie} key={movie.id} />)}
           </Grid2>
+          {apiResponse && (
+            <div className="flex justify-center align-center h-20">
+              <Button
+                size="large"
+                onClick={() => setPaginate((page) => page + 20)}
+              >
+                Show More
+              </Button>
+            </div>
+          )}
         </Grid2>
       </Grid2>
     </ThemeProvider>
