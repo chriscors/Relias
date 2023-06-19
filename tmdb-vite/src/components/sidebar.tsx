@@ -141,6 +141,7 @@ export default function Sidebar({
             onClick={handleToggleOpen}
             size="large"
             sx={{ height: "100%" }}
+            aria-label="Toggle Filters"
           >
             <FilterListIcon />
           </IconButton>
@@ -156,6 +157,7 @@ export default function Sidebar({
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setSearchText(event.target.value);
               }}
+              aria-label="Search"
             />
           </form>
         </Grid2>
@@ -164,6 +166,7 @@ export default function Sidebar({
             onClick={handleSearch}
             size="large"
             sx={{ height: "100%" }}
+            aria-label="Submit Search"
           >
             <SearchIcon />
           </IconButton>

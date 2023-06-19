@@ -22,6 +22,7 @@ export default function MovieCard({ movieData }: MovieDataProps) {
       >
         <CardMedia
           //Movie poster
+
           sx={{ height: 340 }}
           image={
             movieData.poster_path
@@ -29,6 +30,7 @@ export default function MovieCard({ movieData }: MovieDataProps) {
               : "../film.png"
           }
           className={`${!movieData.poster_path && "no-poster"} description`}
+          aria-label="Movie Poster"
         >
           <Grid2
             //Container for the description
@@ -49,6 +51,7 @@ export default function MovieCard({ movieData }: MovieDataProps) {
                 textAlign: "center",
                 margin: "1rem",
               }}
+              aria-label="Movie Overview"
             >
               {movieData.overview}
             </Typography>
@@ -82,7 +85,12 @@ export default function MovieCard({ movieData }: MovieDataProps) {
               justifyContent={"end"}
               alignContent={"flex-start"}
             >
-              <Typography gutterBottom variant="h6" sx={{ margin: "auto 0" }}>
+              <Typography
+                gutterBottom
+                variant="h6"
+                sx={{ margin: "auto 0" }}
+                aria-label="Movie Rating"
+              >
                 {movieData?.vote_average && movieData.vote_average.toFixed(1)}
               </Typography>
               {movieData?.vote_average && movieData.vote_average < 3 ? (
