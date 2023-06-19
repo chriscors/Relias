@@ -10,33 +10,52 @@ For this exercise, I’d like you to look at a simple API, TMDB API https://www.
 [Miro Board](https://miro.com/app/board/uXjVM_HanXM=/?share_link_id=314779408430)
 
 *MVP:*
-- [ ] Pull from the API and display data
-- [ ] Show poster, title, year, rating
+- [x] Pull data from the TMDB API and display it
+- [x] Display poster, title, year, rating
+- [x] Show a message if no results are found
 
 *Tier 1 goals:*
-- [ ] Filter movies by year, genre, rating
-- [ ] Responsive resizing on mobile, with pop in and out filter for xs screen size
-- [ ] Accessible tagging, aria labels, etc
+- [x] Filter movies by year, genre, rating
+- [x] Responsive resizing on mobile, with pop in and out filter for xs screen size
+- [x] Accessible tagging, aria labels, etc
 
 *Additional Stretch Goals:*
-- [ ] Paralax screen effect 
-- [ ] Dark mode
-- [ ] Modal popup displaying additional information
-- [ ] Sticky sidebar, or slide-in slide out
-- [ ] Pagination ()
+- [ ] Paralax screen effect on poster images
+- [x] Implement dark mode
+- [ ] Create a modal popup to display additional details
+- [ ] Add a sticky sidebar or slide-in/slide-out functionality
+- [x] Implememnt pagination
+
 Limitations:
 - Time
 - API does not provide much complex filters besides year
-- I could create a front end filter that appends pages if I wanted to
+
+### Product Description
+
+I began this project by conducting research on popular movie sites, such as IMDB, rotten tomatoes, TMDB, viu, and noting which features and user interface componenbts were most attractive and interesting to me. I compiled that research in a Miro board and created a wireframe, planning out the look of my project and the features I hoped to include. I then conducted research on the tech stack I would include, opting for a single page application utilizing React with Vite, Typescript, and Material UI components that provide a modern UI. I was intentional to make the website mobile responsive by using the Grid2 component structure in MUI, which is built on top of CSS Flexbox, and include modern features such as system preference enabled dark mode. 
 
 
+With this project, I aimed to showcase not only my strong front-end capabilities, but also my ability to implement complex and innovative solutions. To overcome the limitations of the TMDB API, which lacked advanced filtering options beyond release year, I extended its capabilities. Search results are compiled into an array via sequential, asynchronous axios requests, performed until all of the results have been obtained. These results are stored in the application's state, and filters for genre, release year, and ratings are applied. React's rerendering on filter changes provides an engaging user experience as users can see live updates to the search results. 
 
 
-*Tech*:
-- React
-  - Next.js
-    - No: Next provides a great set of features for larger apps, eg SSR, integrated routing. I don't expect to use routing in this app.
-  - Typescript
-    - Yes: While maybe overkill, t will allow me to sharpen my TS skills and provide helpful autocomplete and type checking
-- Material UI components
-- Tailwind CSS
+This project challenged me to deepen my comfort with Typescript, MUI component structure, asynchronous JavaScript, and advanced array manipulation. Given more time, I would have implemented a modal popup to display additional movie details when a user clicks on a card and dedicated more effort to accessibility features.
+
+### Tech
+
+The technologies used in this project and their justification:
+
+- React: Used for responsiveness and state management.
+  - Vite: Chosen for fast deployment, updating, and simple project scaffolding.
+  - Typescript: Provided helpful autocomplete and type safety.
+- Material UI components: Easy to use, well-documented, and highly modular.
+- Tailwind CSS: Added modularity for making small changes.
+- Vanilla CSS: Used for additional styling.
+- Axios: Used for API queries.
+
+### Running the Project Locally
+
+To run the project locally, follow these steps:
+
+1. Clone the repository to your local machine.
+2. Navigate to the "tmdb-vite" directory.
+3. Run the command "npm run dev".
