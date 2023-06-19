@@ -34,28 +34,21 @@ function App() {
       {/* Outer level grid */}
       <Grid2 container spacing={2}>
         {/* Sidebar */}
-        <Grid2 xs={12} sm={4}>
-          <Sidebar />
+        <Grid2 xs={12} sm={4} md={3}>
+          <Sidebar movieData={movieData} setMovieData={setMovieData} />
         </Grid2>
         {/* Results */}
-        <Grid2 xs={12} sm={8}>
+        <Grid2 xs={12} sm={8} md={9}>
           <Typography variant="h4" marginBottom={"1rem"}>
             Results
           </Typography>
-          <Cards />
+          <Grid2 container spacing={3} justifyContent={"space-evenly"}>
+            {movieData &&
+              movieData.map((movie) => <MovieCard movieData={movie} />)}
+          </Grid2>
         </Grid2>
       </Grid2>
     </ThemeProvider>
-  );
-}
-
-function Cards() {
-  return (
-    <Grid2 container spacing={3} justifyContent={"center"}>
-      <MovieCard />
-      <MovieCard />
-      <MovieCard />
-    </Grid2>
   );
 }
 
