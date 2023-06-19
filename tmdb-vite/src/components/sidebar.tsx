@@ -64,19 +64,17 @@ export default function Sidebar({
     axios
       .request(options)
       .then(function (response) {
-        console.log(response.data);
-        setApiResponse(response.data);
-        setMovieData(response.data.results);
-
-        if (response.data.total_pages > 1) getAllResults(response.data);
+        if (response.data.total_pages > 1) {
+          getAllResults(response.data);
+        } else setApiResponse(response.data);
       })
       .catch(function (error) {
         console.error(error);
       });
   };
 
-  const getAllResults = (response: ApiResponse) => {
-    for (let pageNum = 2; pageNum < response.total_pages; pageNum++) {
+  const getAllResults = async (baseResponse: ApiResponse) => {
+    for (let pageNum = 2; pageNum < baseResponse.total_pages; pageNum++) {
       const options = {
         method: "GET",
         url: "https://api.themoviedb.org/3/search/movie",
@@ -93,17 +91,12 @@ export default function Sidebar({
         },
       };
 
-      axios
-        .request(options)
-        .then(function (response) {
-          console.log(response.data);
-          setApiResponse(response.data);
-          setMovieData([...movieData, ...response.data.results]);
-          console.log(movieData);
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
+      const response = await axios.request(options);
+
+      baseResponse.results = [
+        ...baseResponse.results,
+        ...response.data.results,
+      ];
     }
   };
 
