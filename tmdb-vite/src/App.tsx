@@ -16,11 +16,25 @@ import { ApiResponse } from "./types";
 import axios from "axios";
 
 function App() {
-  //State holding API response
+  const date = new Date();
+
+  //Declare state variables
+  //API response and movie data
   const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
+  //Num items to render to page
   const [paginate, setPaginate] = useState(19);
+  //Show loading animation
   const [loading, setLoading] = useState(false);
+  //Has the user searched for a movie? (Modifies header)
   const [hasSearched, setHasSearched] = useState(false);
+
+  //Filters utilized in filter function
+  const [genreFilter, setGenreFilter] = useState<string[]>([]);
+  const [ratingFilter, setRatingFilter] = useState(0);
+  const [releaseFilter, setReleaseFilter] = useState<number[]>([
+    1900,
+    date.getFullYear(),
+  ]);
 
   //Logic for setting MUI Dark mode
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -85,6 +99,12 @@ function App() {
             setApiResponse={setApiResponse}
             setLoading={setLoading}
             setHasSearched={setHasSearched}
+            genreFilter={genreFilter}
+            setGenreFilter={setGenreFilter}
+            ratingFilter={ratingFilter}
+            setRatingFilter={setRatingFilter}
+            releaseFilter={releaseFilter}
+            setReleaseFilter={setReleaseFilter}
           />
         </Grid2>
         {/* Results */}
@@ -99,6 +119,10 @@ function App() {
             {apiResponse &&
               apiResponse.results
                 .slice(0, paginate)
+                .filter((movie) => {
+                  movie.release_date.getFullYear() >= releaseFilter[0] &&
+                    movie.release_date.getFullYear() <= releaseFilter[1];
+                })
                 .map((movie) => <MovieCard movieData={movie} key={movie.id} />)}
           </Grid2>
           {apiResponse && (
