@@ -5,6 +5,10 @@
   animation: fadeAnimation 0.25s ease-in-out forwards;
 }
 
+.no-poster {
+  background-size: contain !important;
+}
+
 @keyframes fadeAnimation {
   0% {
     opacity: 0;
