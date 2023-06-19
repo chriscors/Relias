@@ -42,9 +42,9 @@ export default function Sidebar({
   releaseFilter,
   setReleaseFilter,
 }: SidebarProps) {
-  const date = new Date();
+  //Value of the search bar
   const [searchText, setSearchText] = useState("");
-
+  //Is the filter box open on mobile
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleToggleOpen = () => {
