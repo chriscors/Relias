@@ -131,11 +131,12 @@ function GenreSelect({ genreFilter, setGenreFilter }: GenreProps) {
             </div>
           )}
         >
-          {genres.map((genre) => (
-            <MenuItem
-              key={genre}
-              value={genre}
-              style={getSelected(genre, genreFilter)}
+          {genres.length > 0 &&
+            genres.map((genre) => (
+              <MenuItem
+                key={genre.id}
+                value={genre.name}
+                style={getSelected(genre, genreFilter)}
             >
               {genre}
             </MenuItem>
