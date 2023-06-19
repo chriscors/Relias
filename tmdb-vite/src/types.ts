@@ -8,7 +8,7 @@ export interface MovieData {
   overview: string;
   popularity: number;
   poster_path: string;
-  release_date: string;
+  release_date: Date;
   title: string;
   video: boolean;
   vote_average: number;
@@ -20,4 +20,9 @@ export interface ApiResponse {
   results: MovieData[];
   total_pages: number;
   total_results: number;
+}
+
+export interface Genre {
+  id: number;
+  name: string;
 }

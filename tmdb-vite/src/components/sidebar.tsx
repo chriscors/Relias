@@ -15,29 +15,37 @@ import { Dispatch, SetStateAction, useState } from "react";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import SearchIcon from "@mui/icons-material/Search";
 import Filters from "./filters";
-import { ApiResponse, MovieData } from "../types";
+import { ApiResponse, Genre, MovieData } from "../types";
+import FilterListIcon from "@mui/icons-material/FilterList";
 import axios from "axios";
+
+interface SidebarProps {
+  setApiResponse: Dispatch<SetStateAction<ApiResponse | null>>;
+  setLoading: Dispatch<SetStateAction<boolean>>;
+  setHasSearched: Dispatch<SetStateAction<boolean>>;
+  genreFilter: Genre[];
+  setGenreFilter: Dispatch<SetStateAction<Genre[]>>;
+  ratingFilter: number;
+  setRatingFilter: Dispatch<SetStateAction<number>>;
+  releaseFilter: number[];
+  setReleaseFilter: Dispatch<SetStateAction<number[]>>;
+}
 
 export default function Sidebar({
   setApiResponse,
   setLoading,
   setHasSearched,
-}: {
-  setApiResponse: Dispatch<SetStateAction<ApiResponse | null>>;
-  setLoading: Dispatch<SetStateAction<boolean>>;
-  setHasSearched: Dispatch<SetStateAction<boolean>>;
-}) {
-  const date = new Date();
+  genreFilter,
+  setGenreFilter,
+  ratingFilter,
+  setRatingFilter,
+  releaseFilter,
+  setReleaseFilter,
+}: SidebarProps) {
+  //Value of the search bar
   const [searchText, setSearchText] = useState("");
-
+  //Is the filter box open on mobile
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  const [genreFilter, setGenreFilter] = useState<string[]>([]);
-  const [ratingFilter, setRatingFilter] = useState(0);
-  const [releaseFilter, setReleaseFilter] = useState<number[]>([
-    1900,
-    date.getFullYear(),
-  ]);
 
   const handleToggleOpen = () => {
     setMobileOpen((open) => !open);
@@ -71,7 +79,15 @@ export default function Sidebar({
       .then(function (response) {
         if (response.data.total_pages > 1) {
           getAllResults(response.data);
-        } else setApiResponse(response.data);
+        } else {
+          //format the release date as a date object
+          response.data.results.map(
+            (movie: MovieData) =>
+              (movie.release_date = new Date(movie.release_date))
+          );
+
+          setApiResponse(response.data);
+        }
       })
       .catch(function (error) {
         console.error(error);
@@ -103,6 +119,10 @@ export default function Sidebar({
         ...response.data.results,
       ];
     }
+    baseResponse.results.map(
+      (movie) => (movie.release_date = new Date(movie.release_date))
+    );
+
     setApiResponse(baseResponse);
     setLoading(false);
   };
@@ -116,7 +136,17 @@ export default function Sidebar({
   return (
     <>
       <Grid2 container alignItems={"start"} marginBottom={"2rem"}>
-        <Grid2 xs={10}>
+        <Grid2 xs={2} sx={{ display: { xs: "block", sm: "none" } }}>
+          <IconButton
+            onClick={handleToggleOpen}
+            size="large"
+            sx={{ height: "100%" }}
+            aria-label="Toggle Filters"
+          >
+            <FilterListIcon />
+          </IconButton>
+        </Grid2>
+        <Grid2 xs={8} sm={10}>
           <form onSubmit={handleSearch}>
             <TextField
               id="outlined-basic"
@@ -127,14 +157,16 @@ export default function Sidebar({
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setSearchText(event.target.value);
               }}
+              aria-label="Search"
             />
           </form>
         </Grid2>
-        <Grid2 xs={2}>
+        <Grid2 container xs={2} justifyContent={"flex-end"}>
           <IconButton
             onClick={handleSearch}
             size="large"
             sx={{ height: "100%" }}
+            aria-label="Submit Search"
           >
             <SearchIcon />
           </IconButton>
@@ -154,6 +186,25 @@ export default function Sidebar({
             setReleaseFilter={setReleaseFilter}
           />
         </Grid2>
+      </Grid2>
+      <Grid2
+        //shows only on xs and if filter is clicked
+        sx={
+          mobileOpen
+            ? { display: { xs: "block", sm: "none" }, width: "100%" }
+            : { display: "none" }
+        }
+      >
+        <Divider sx={{ margin: "1rem 0" }} />
+        {/* Show filters */}
+        <Filters
+          genreFilter={genreFilter}
+          setGenreFilter={setGenreFilter}
+          ratingFilter={ratingFilter}
+          setRatingFilter={setRatingFilter}
+          releaseFilter={releaseFilter}
+          setReleaseFilter={setReleaseFilter}
+        />
       </Grid2>
     </>
   );

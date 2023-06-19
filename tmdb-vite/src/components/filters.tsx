@@ -1,16 +1,16 @@
 import { Button, Slider, Typography } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
-import { Dispatch, SetStateAction } from "react";
-import Box from "@mui/material/Box";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
+import axios from "axios";
+import { Genre } from "../types";
 interface FilterProps {
-  genreFilter: string[];
-  setGenreFilter: Dispatch<SetStateAction<string[]>>;
+  genreFilter: Genre[];
+  setGenreFilter: Dispatch<SetStateAction<Genre[]>>;
   ratingFilter: number;
   setRatingFilter: Dispatch<SetStateAction<number>>;
   releaseFilter: number[];
@@ -27,7 +27,12 @@ export default function Filters({
 }: FilterProps) {
   const date = new Date();
 
-  const clearFilters = () => {};
+  //On button click, reset filters to original state
+  const clearFilters = () => {
+    setRatingFilter(0);
+    setReleaseFilter([1900, date.getFullYear()]);
+    setGenreFilter([]);
+  };
   return (
     <>
       <Grid2 container>
@@ -87,29 +92,64 @@ export default function Filters({
   );
 }
 
-const genres = ["Comedy", "Action", "Horror"];
-
-function getSelected(genre: string, selectedGenres: readonly string[]) {
+function getSelected(genre: Genre, selectedGenres: Genre[]) {
   //Return sx for fontWeight regular in genre not in genreList, otherwise, return medium font if genre in genreList
   return {
-    fontWeight: selectedGenres.indexOf(genre) === -1 ? "regular" : "bold",
+    fontWeight:
+      selectedGenres.map((gen) => gen.id).indexOf(genre.id) === -1
+        ? "regular"
+        : "bold",
   };
 }
 
-interface GenreProps {
-  genreFilter: string[];
-  setGenreFilter: Dispatch<SetStateAction<string[]>>;
-}
+function GenreSelect({
+  genreFilter,
+  setGenreFilter,
+}: {
+  genreFilter: Genre[];
+  setGenreFilter: Dispatch<SetStateAction<Genre[]>>;
+}) {
+  //List of genres obtained from API below
+  const [genres, setGenres] = useState<Genre[]>([]);
 
-function GenreSelect({ genreFilter, setGenreFilter }: GenreProps) {
-  const handleChange = (event: SelectChangeEvent<typeof genreFilter>) => {
-    //get the value of the select component
-    const value = event.target.value;
-    //set genreFilter to equal the value
-    setGenreFilter(
-      // Typescript: if  it's a string. split to be an array
-      typeof value === "string" ? value.split(",") : value
-    );
+  //Get the genre ids for filter
+  useEffect(() => {
+    const options = {
+      method: "GET",
+      url: "https://api.themoviedb.org/3/genre/movie/list",
+      params: { language: "en" },
+      headers: {
+        accept: "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMjViZGY3NTBiZDM1OGFiOWY0ZGNiZDE1N2M0MjNiZiIsInN1YiI6IjY0ODg3MjhiOTkyNTljMDBjNWI2NGIxYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.kIfA4gOg-CgepL5qMEVtbdh7oOp9NzF--Gs3y8l90JI",
+      },
+    };
+
+    axios
+      .request(options)
+      .then(function (response) {
+        console.log(response);
+
+        setGenres(response.data.genres);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }, []);
+
+  const handleToggleGenre = (genre: Genre) => {
+    //Get the index of the genre ID (-1 if not found)
+    const genreIndex = genreFilter.map((g) => g.id).indexOf(genre.id);
+
+    if (genreIndex !== -1) {
+      // Genre object found, remove it from the array, first making a shallow copy then removing it and updating the state
+      const updatedGenres = [...genreFilter];
+      updatedGenres.splice(genreIndex, 1);
+      setGenreFilter(updatedGenres);
+    } else {
+      // Genre object not found, add it to the array
+      setGenreFilter([...genreFilter, genre]);
+    }
   };
 
   return (
@@ -119,27 +159,28 @@ function GenreSelect({ genreFilter, setGenreFilter }: GenreProps) {
           id="genre-select"
           multiple
           label="" //remove the label for consistency
-          value={genreFilter}
-          onChange={handleChange}
+          value={genreFilter.map((g) => g.name)}
           input={<OutlinedInput id="genre-select" />}
-          renderValue={(selected) => (
+          renderValue={(selectedGenres) => (
             //Render the selected genres as chips
             <div className="flex gap-1">
-              {selected.map((value) => (
-                <Chip key={value} label={value} />
+              {selectedGenres.map((genre) => (
+                <Chip key={genre} label={genre} />
               ))}
             </div>
           )}
         >
-          {genres.map((genre) => (
-            <MenuItem
-              key={genre}
-              value={genre}
-              style={getSelected(genre, genreFilter)}
-            >
-              {genre}
-            </MenuItem>
-          ))}
+          {genres.length > 0 &&
+            genres.map((genre) => (
+              <MenuItem
+                key={genre.id}
+                value={genre.name}
+                style={getSelected(genre, genreFilter)}
+                onClick={() => handleToggleGenre(genre)}
+              >
+                {genre.name}
+              </MenuItem>
+            ))}
         </Select>
       </FormControl>
     </div>

@@ -10,7 +10,6 @@ interface MovieDataProps {
 }
 
 export default function MovieCard({ movieData }: MovieDataProps) {
-  const releaseDate = new Date(movieData.release_date);
   return (
     <Grid2>
       <Card
@@ -23,6 +22,7 @@ export default function MovieCard({ movieData }: MovieDataProps) {
       >
         <CardMedia
           //Movie poster
+
           sx={{ height: 340 }}
           image={
             movieData.poster_path
@@ -30,6 +30,7 @@ export default function MovieCard({ movieData }: MovieDataProps) {
               : "../film.png"
           }
           className={`${!movieData.poster_path && "no-poster"} description`}
+          aria-label="Movie Poster"
         >
           <Grid2
             //Container for the description
@@ -50,6 +51,7 @@ export default function MovieCard({ movieData }: MovieDataProps) {
                 textAlign: "center",
                 margin: "1rem",
               }}
+              aria-label="Movie Overview"
             >
               {movieData.overview}
             </Typography>
@@ -75,7 +77,7 @@ export default function MovieCard({ movieData }: MovieDataProps) {
           </Grid2>
           <Grid2 container justifyContent={"space-between"}>
             <Typography variant="h6">
-              {movieData.release_date && releaseDate.getFullYear()}
+              {movieData.release_date && movieData.release_date.getFullYear()}
             </Typography>
             <Grid2
               xs={3}
@@ -83,7 +85,12 @@ export default function MovieCard({ movieData }: MovieDataProps) {
               justifyContent={"end"}
               alignContent={"flex-start"}
             >
-              <Typography gutterBottom variant="h6" sx={{ margin: "auto 0" }}>
+              <Typography
+                gutterBottom
+                variant="h6"
+                sx={{ margin: "auto 0" }}
+                aria-label="Movie Rating"
+              >
                 {movieData?.vote_average && movieData.vote_average.toFixed(1)}
               </Typography>
               {movieData?.vote_average && movieData.vote_average < 3 ? (
