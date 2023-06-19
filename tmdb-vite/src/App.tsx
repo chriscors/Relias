@@ -33,6 +33,15 @@ function App() {
     // Enable dark mode using the theme provider component
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      {hasSearched ? (
+        <Typography variant="h4" marginY={4} textAlign={"center"}>
+          Results ({apiResponse?.total_results})
+        </Typography>
+      ) : (
+        <Typography variant="h4" marginY={4} textAlign={"center"}>
+          Search for a movie
+        </Typography>
+      )}
       {/* Outer level grid */}
       <Grid2 container spacing={2}>
         {/* Sidebar */}
