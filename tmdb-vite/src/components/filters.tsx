@@ -86,7 +86,7 @@ export default function Filters({
             min={1900}
             max={date.getFullYear()}
             value={releaseFilter}
-            onChange={(e, v) => setReleaseFilter(v as number[])}
+            onChange={(_, v) => setReleaseFilter(v as number[])}
           />
         </Grid2>
       </Grid2>
