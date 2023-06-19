@@ -137,7 +137,7 @@ function GenreSelect({ genreFilter, setGenreFilter }: GenreProps) {
                 key={genre.id}
                 value={genre.name}
                 style={getSelected(genre, genreFilter)}
-            >
+              >
               {genre}
             </MenuItem>
           ))}
