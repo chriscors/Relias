@@ -8,7 +8,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
-interface FilterBundleProps {
+interface FilterProps {
   genreFilter: string[];
   setGenreFilter: Dispatch<SetStateAction<string[]>>;
   ratingFilter: number;
@@ -24,8 +24,10 @@ export default function Filters({
   setRatingFilter,
   releaseFilter,
   setReleaseFilter,
-}: FilterBundleProps) {
+}: FilterProps) {
   const date = new Date();
+
+  const clearFilters = () => {};
   return (
     <>
       <Grid2 container>
