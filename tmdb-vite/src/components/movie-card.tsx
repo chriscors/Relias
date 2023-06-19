@@ -45,7 +45,7 @@ export default function MovieCard({ movieData }: MovieDataProps) {
           >
             <Typography
               //Description text
-              variant="body"
+              variant="body1"
               color="text"
               sx={{
                 textAlign: "center",
