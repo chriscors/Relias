@@ -3,6 +3,8 @@ import "./App.css";
 import Sidebar from "./components/sidebar";
 import MovieCard from "./components/movie-card";
 import {
+  Button,
+  CircularProgress,
   CssBaseline,
   Typography,
   createTheme,
