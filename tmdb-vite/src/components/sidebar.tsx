@@ -35,23 +35,21 @@ export default function Sidebar({
   //Is the filter box open on mobile
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const handleToggleOpen = () => {
-    setMobileOpen((open) => !open);
-  };
-
   const handleSearch = (event: any) => {
-    //Set loading to TRUE (show spinner), clear past results, and set has searched to true, changing header
+    //Set loading to true (show spinner), clear past results, and set has searched to true, changing header
     setLoading(true);
     setApiResponse(null);
     setHasSearched(true);
+    //prevent the page from loading when enter is pressed
     event.preventDefault();
 
+    //get the first page of data
     const options = {
       method: "GET",
       url: "https://api.themoviedb.org/3/search/movie",
       params: {
         query: searchText,
-        include_adult: "true",
+        include_adult: "false",
         language: "en-US",
         page: 1,
       },
@@ -65,16 +63,19 @@ export default function Sidebar({
     axios
       .request(options)
       .then(function (response) {
+        //format the release date as a date object
+        response.data.results.map(
+          (movie: MovieData) =>
+            (movie.release_date = new Date(movie.release_date))
+        );
+
+        //if theres more than one page of data, get all of the results as a singular object so that they can be filtered
         if (response.data.total_pages > 1) {
           getAllResults(response.data);
         } else {
-          //format the release date as a date object
-          response.data.results.map(
-            (movie: MovieData) =>
-              (movie.release_date = new Date(movie.release_date))
-          );
-
+          //set state
           setApiResponse(response.data);
+          setLoading(false);
         }
       })
       .catch(function (error) {
@@ -83,13 +84,14 @@ export default function Sidebar({
   };
 
   const getAllResults = async (baseResponse: ApiResponse) => {
+    //repeat axios call for each remaining page of the results
     for (let pageNum = 2; pageNum < baseResponse.total_pages; pageNum++) {
       const options = {
         method: "GET",
         url: "https://api.themoviedb.org/3/search/movie",
         params: {
           query: searchText,
-          include_adult: "true",
+          include_adult: "false",
           language: "en-US",
           page: pageNum,
         },
@@ -99,19 +101,23 @@ export default function Sidebar({
             "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMjViZGY3NTBiZDM1OGFiOWY0ZGNiZDE1N2M0MjNiZiIsInN1YiI6IjY0ODg3MjhiOTkyNTljMDBjNWI2NGIxYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.kIfA4gOg-CgepL5qMEVtbdh7oOp9NzF--Gs3y8l90JI",
         },
       };
-
+      //utilize async await to obtain data - forces function to pause for promise, fixing state update issue
       const response = await axios.request(options);
 
+      //format the release date as a date object
+      response.data.results.map(
+        (movie: MovieData) =>
+          (movie.release_date = new Date(movie.release_date))
+      );
+
+      //utilize spread operator to combine arrays
       baseResponse.results = [
         ...baseResponse.results,
         ...response.data.results,
       ];
-    }
-    baseResponse.results.map(
-      (movie) => (movie.release_date = new Date(movie.release_date))
-    );
 
-    setApiResponse(baseResponse);
+      setApiResponse(baseResponse);
+    }
     setLoading(false);
   };
 
@@ -126,7 +132,8 @@ export default function Sidebar({
       <Grid2 container alignItems={"start"} marginBottom={"2rem"}>
         <Grid2 xs={2} sx={{ display: { xs: "block", sm: "none" } }}>
           <IconButton
-            onClick={handleToggleOpen}
+            //on click, toggle filter open
+            onClick={() => setMobileOpen((open) => !open)}
             size="large"
             sx={{ height: "100%" }}
             aria-label="Toggle Filters"
