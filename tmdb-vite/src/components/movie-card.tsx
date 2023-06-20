@@ -21,13 +21,14 @@ export default function MovieCard({ movieData }: MovieDataProps) {
       >
         <CardMedia
           //Movie poster
-
           sx={{ height: 340 }}
           image={
+            //if no poster, show a default photo
             movieData.poster_path
               ? `https://image.tmdb.org/t/p/original${movieData.poster_path}`
               : "../film.png"
           }
+          //vanilla css enables hover
           className={`${!movieData.poster_path && "no-poster"} description`}
           aria-label="Movie Poster"
         >
@@ -75,8 +76,11 @@ export default function MovieCard({ movieData }: MovieDataProps) {
             </Grid2>
           </Grid2>
           <Grid2 container justifyContent={"space-between"}>
-            <Typography variant="h6">
-              {movieData.release_date && movieData.release_date.getFullYear()}
+            <Typography variant="h6" aria-aria-label="Release Year">
+              {
+                //if release year, release year
+                movieData.release_date && movieData.release_date.getFullYear()
+              }
             </Typography>
             <Grid2
               xs={3}
@@ -92,13 +96,16 @@ export default function MovieCard({ movieData }: MovieDataProps) {
               >
                 {movieData?.vote_average && movieData.vote_average.toFixed(1)}
               </Typography>
-              {movieData?.vote_average && movieData.vote_average < 3 ? (
-                <StarBorderOutlined sx={{ height: "100%" }} />
-              ) : movieData?.vote_average && movieData.vote_average < 7 ? (
-                <StarHalfIcon sx={{ height: "100%" }} />
-              ) : (
-                <Star sx={{ height: "100%" }} />
-              )}
+              {
+                //if a movie rating, show the rating and a corresponding star
+                movieData?.vote_average && movieData.vote_average < 3 ? (
+                  <StarBorderOutlined sx={{ height: "100%" }} />
+                ) : movieData?.vote_average && movieData.vote_average < 7 ? (
+                  <StarHalfIcon sx={{ height: "100%" }} />
+                ) : (
+                  <Star sx={{ height: "100%" }} />
+                )
+              }
             </Grid2>
           </Grid2>
         </CardContent>
