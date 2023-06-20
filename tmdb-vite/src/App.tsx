@@ -102,14 +102,18 @@ function App() {
           />
         </Grid2>
         {/* Results */}
-        <Grid2 xs={12} sm={8} md={9}>
+        <Grid2 xs={12} sm={8} md={9} container>
+          {!apiResponse && (
+            <div className="w-full flex justify-center">
+              <CircularProgress sx={{ margin: "1rem 0" }} />
+            </div>
+          )}
           <Grid2
             container
             spacing={3}
             justifyContent={"space-evenly"}
             height={"100%"}
           >
-            {loading && <CircularProgress sx={{ margin: "5rem 0" }} />}
             {apiResponse &&
               filteredApiResponse
                 ?.slice(0, paginate)
@@ -126,7 +130,7 @@ function App() {
             </div>
           )}
           {filteredApiResponse?.length === 0 && (
-            <div className="flex justify-center align-center h-20">
+            <div className="w-full flex justify-center align-center h-20 ">
               <Typography variant="h4">No Results</Typography>
             </div>
           )}
